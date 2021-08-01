@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\RegisterForm;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -86,6 +88,19 @@ class SiteController extends Controller
         ]);
     }
 
+//    public function actionAddAdmin() {
+//        $model = User::find()->where(['username' => 'admin'])->one();
+//        if (empty($model)) {
+//            $user = new User();
+//            $user->username = 'admin';
+//            $user->setPassword('admin');
+//            $user->generateAuthKey();
+//            if ($user->save()) {
+//                $this->goHome();
+//            }
+//        }
+//    }
+
     /**
      * Logout action.
      *
@@ -96,6 +111,25 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionRegister()
+    {
+        $model = new RegisterForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->register()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            } else {
+                Yii::$app->session->setFlash('warning','Something went wrong');
+            }
+        }
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
     }
 
     /**

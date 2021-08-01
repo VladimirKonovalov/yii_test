@@ -13,11 +13,17 @@ class m210801_134927_initial extends Migration
      */
     public function safeUp()
     {
+        $tableOptions = null;
+
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         // create test list of organizations
         $this->createTable('organization', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-        ]);
+        ], $tableOptions);
         $this->insert('organization', [
             'name' => 'Intel',
         ]);
@@ -35,7 +41,8 @@ class m210801_134927_initial extends Migration
             'password' => $this->string()->notNull(),
             'organization_id' => $this->integer()->notNull(),
             'position' => $this->string()->notNull(),
-        ]);
+            'auth_key' => $this->string(32)->notNull(),
+        ], $tableOptions);
         $this->addForeignKey(
             'fk-user-organization_id',
             'user',
@@ -53,7 +60,7 @@ class m210801_134927_initial extends Migration
             'path' => $this->string()->notNull(),
             'type' => $this->integer()->notNull()->comment("type=1 picture, type=2 document"),
             'user_id' => $this->integer()->notNull(),
-        ]);
+        ], $tableOptions);
         $this->addForeignKey(
             'fk-file-user_id',
             'file',
