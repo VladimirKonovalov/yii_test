@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\File;
 use app\models\RegisterForm;
 use app\models\User;
 use app\models\UserSearch;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -67,6 +70,25 @@ class SiteController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if (Yii::$app->request->post()) {
+            $spreadsheet = new Spreadsheet();
+
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $allData = $dataProvider->query->all();
+            foreach ($allData as $index => $data) {
+                $file = File::find()->where('user_id=:id',[':id'=> $data->id])->one();
+                $sheet->setCellValueByColumnAndRow(1, $index + 1, $data->username);
+                $sheet->setCellValueByColumnAndRow(2, $index + 1, $data->organizationName);
+                $sheet->setCellValueByColumnAndRow(3, $index + 1, $file ? $file->path : '');
+            }
+            $writer = new Xlsx($spreadsheet);
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="'. urlencode('export.xlsx').'"');
+            $writer->save('php://output');
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

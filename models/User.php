@@ -20,9 +20,9 @@ use yii\web\IdentityInterface;
  * @property string $password write-only password
  *
  * @property Organization $organization
- * @property string $organizationName
+ * @property File $file
  *
- * @property File[] $files
+ *
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -41,6 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['organization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Organization::class, 'targetAttribute' => ['organization_id' => 'id']],
+//            [['id'], 'exist', 'skipOnError' => true, 'targetClass' => File::class, 'targetAttribute' => ['id' => 'user_id']],
         ];
     }
 
@@ -140,8 +141,22 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->organization->name;
     }
 
+    /**
+     * Геттер для path
+     * @return string
+     */
+    public function getFilePath() {
+        return $this->file->path;
+    }
+
     public function getFile()
     {
         return $this->hasOne(File::class, ['user_id' => 'id']);
     }
+
+    public function getDocument()
+    {
+        return $this->hasMany(Document::class, ['user_id' => 'id']);
+    }
+
 }

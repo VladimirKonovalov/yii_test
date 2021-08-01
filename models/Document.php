@@ -7,19 +7,17 @@ use yii\db\ActiveRecord;
 
 
 /**
- * This is the model class for table "file".
+ * This is the model class for table "document".
  *
  * @property integer $id
  * @property string $path
  * @property integer $user_id
- *
- * @property User $user
  */
-class File extends ActiveRecord
+class Document extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'file';
+        return 'document';
     }
 
     public function rules()
@@ -46,3 +44,5 @@ class File extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }
+
+

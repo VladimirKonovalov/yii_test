@@ -15,7 +15,8 @@ class UserSearch extends User
 {
     /* Вычисляемые аттрибуты */
     public $organizationName;
-    public $file;
+    public $filePath;
+    public $document;
 
     /**
      * @inheritdoc
@@ -24,7 +25,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'organization_id'], 'integer'],
-            [['username', 'organizationName','image'], 'safe'],
+            [['username', 'organizationName','filePath', 'document'], 'safe'],
         ];
     }
 
@@ -55,7 +56,7 @@ class UserSearch extends User
         ]);
 
         /* Включаем связанные таблицы в выборку */
-        $query->joinWith(['organization', 'file']);
+        $query->joinWith(['organization', 'file', 'document']);
 
         /**
          * Настройка параметров сортировки
@@ -97,7 +98,7 @@ class UserSearch extends User
         $query->andFilterWhere(['like', 'username', $this->username]);
 
 
-        // Фильтр по стране
+        // Фильтр по организации
         if ($this->organizationName) {
             $query->andFilterWhere(['like', 'organization.name', $this->organizationName]);
         }
