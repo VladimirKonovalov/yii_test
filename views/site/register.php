@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
+use app\models\Organization;
 
 $this->title = 'Register';
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
             <?= $form->field($model, 'password')->passwordInput() ?>
+            <?= $form->field($model, 'organization_id')->dropDownList(Organization::getList(),['prompt' => 'Выберите организацию...']) ?>
+            <?= $form->field($model, 'position')->textInput() ?>
             <div class="form-group">
                 <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
             </div>

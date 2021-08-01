@@ -18,6 +18,9 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  * @property string $position
  * @property string $password write-only password
+ *
+ * @property Organization $organization
+ * @property string $organizationName
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -35,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-
+            [['organization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Organization::class, 'targetAttribute' => ['organization_id' => 'id']],
         ];
     }
 
@@ -119,4 +122,19 @@ class User extends ActiveRecord implements IdentityInterface
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrganization()
+    {
+        return $this->hasOne(Organization::class, ['id' => 'organization_id']);
+    }
+
+    /**
+     * Геттер для названия организации
+     * @return string
+     */
+    public function getOrganizationName() {
+        return $this->organization->name;
+    }
 }

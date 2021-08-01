@@ -37,6 +37,19 @@ class RegisterForm extends Model
     }
 
     /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Пользователь',
+            'password' => 'Пароль',
+            'organization_id' => 'Организация',
+            'position' => 'Должность',
+        ];
+    }
+
+    /**
      * Signs user up.
      *
      * @return User|null the saved model or null if saving fails

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\RegisterForm;
 use app\models\User;
+use app\models\UserSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -88,6 +89,7 @@ class SiteController extends Controller
         ]);
     }
 
+    //test function to add admin
 //    public function actionAddAdmin() {
 //        $model = User::find()->where(['username' => 'admin'])->one();
 //        if (empty($model)) {
@@ -139,14 +141,12 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->refresh();
-        }
         return $this->render('contact', [
-            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
