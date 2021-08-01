@@ -1,4 +1,4 @@
-.doc
-.docx
-.xlsx
-.xls
+*.doc
+*.docx
+*.xlsx
+*.xls
