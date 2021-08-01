@@ -1,0 +1,28 @@
+version: '2'
+services:
+  php:
+    container_name: php_yii2
+    image: yiisoftware/yii2-php:7.4-apache
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    ports:
+      - '8000:80'
+    links:
+    - db
+    depends_on:
+    - db
+  db:
+    container_name: mysql_yii2
+    image: 'mysql:latest'
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+    - 9513:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: yii2basic
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqluser
+    volumes:
+    - ./docker/database:/var/lib/mysql
