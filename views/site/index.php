@@ -1,7 +1,8 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
@@ -20,9 +21,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'file',
+                'label' => 'Изображение',
+                'value' => 'file.path',
+                'format' => 'image',
+            ],
+            [
+                'attribute' => 'username',
+                'label' => 'Пользователь',
+                'value' => 'username',
+            ],
+            [
+                'attribute' => 'organizationName',
+                'label' => 'Организация',
+                'value' => 'organizationName',
+            ],
 
-            'username',
-            'organizationName',
 
   //          ['class' => 'yii\grid\ActionColumn'],
         ],

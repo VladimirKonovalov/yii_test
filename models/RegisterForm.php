@@ -3,6 +3,8 @@ namespace app\models;
 
     use Yii;
     use yii\base\Model;
+    use yii\helpers\Url;
+    use yii\web\UploadedFile;
 
     /**
      * Register form
@@ -46,6 +48,8 @@ class RegisterForm extends Model
             'password' => 'Пароль',
             'organization_id' => 'Организация',
             'position' => 'Должность',
+            'imageFile' => 'Фото',
+            'documentFiles' => 'Документы'
         ];
     }
 
@@ -70,4 +74,22 @@ class RegisterForm extends Model
         return $user->save() ? $user : null;
     }
 
+    public function upload($prefix, $user_id)
+    {
+        if ($this->validate()) {
+            // save file
+            $filename = 'uploads/images/'. $prefix. '_' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            $this->imageFile->saveAs($filename);
+            // add db record
+            $modelFile = new File();
+            $absPath = Url::home(true);
+            $modelFile->path = $absPath.$filename;
+            $modelFile->user_id = $user_id;
+            $modelFile->save();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

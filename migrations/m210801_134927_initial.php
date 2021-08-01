@@ -53,17 +53,29 @@ class m210801_134927_initial extends Migration
         );
 
         // create table file, add foreign key to user
-        // type = 1; picture
-        // type = 2; document
         $this->createTable('file', [
             'id' => $this->primaryKey(),
             'path' => $this->string()->notNull(),
-            'type' => $this->integer()->notNull()->comment("type=1 picture, type=2 document"),
             'user_id' => $this->integer()->notNull(),
         ], $tableOptions);
         $this->addForeignKey(
             'fk-file-user_id',
             'file',
+            'user_id',
+            'user',
+            'id',
+            'CASCADE'
+        );
+
+        // create table document, add foreign key to user
+        $this->createTable('document', [
+            'id' => $this->primaryKey(),
+            'path' => $this->string()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+        ], $tableOptions);
+        $this->addForeignKey(
+            'fk-document-user_id',
+            'document',
             'user_id',
             'user',
             'id',

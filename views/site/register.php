@@ -21,6 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'password')->passwordInput() ?>
             <?= $form->field($model, 'organization_id')->dropDownList(Organization::getList(),['prompt' => 'Выберите организацию...']) ?>
             <?= $form->field($model, 'position')->textInput() ?>
+            <?= $form->field($model, 'imageFile')->fileInput() ?>
+
+            <?= $form->field($model, 'documentFiles[]')->fileInput(['multiple' => true]) ?>
             <div class="form-group">
                 <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
             </div>

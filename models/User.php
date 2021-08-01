@@ -21,6 +21,8 @@ use yii\web\IdentityInterface;
  *
  * @property Organization $organization
  * @property string $organizationName
+ *
+ * @property File[] $files
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -136,5 +138,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getOrganizationName() {
         return $this->organization->name;
+    }
+
+    public function getFile()
+    {
+        return $this->hasOne(File::class, ['user_id' => 'id']);
     }
 }

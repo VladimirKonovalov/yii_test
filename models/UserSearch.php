@@ -15,6 +15,7 @@ class UserSearch extends User
 {
     /* Вычисляемые аттрибуты */
     public $organizationName;
+    public $file;
 
     /**
      * @inheritdoc
@@ -23,7 +24,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'organization_id'], 'integer'],
-            [['username', 'organizationName'], 'safe'],
+            [['username', 'organizationName','image'], 'safe'],
         ];
     }
 
@@ -54,7 +55,7 @@ class UserSearch extends User
         ]);
 
         /* Включаем связанные таблицы в выборку */
-        $query->joinWith(['organization']);
+        $query->joinWith(['organization', 'file']);
 
         /**
          * Настройка параметров сортировки

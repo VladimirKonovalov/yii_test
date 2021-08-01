@@ -12,6 +12,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -127,6 +128,10 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->register()) {
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                if ($model->upload(time(), $user->id)) {
+                    Yii::$app->session->setFlash('success','OK');
+                }
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
