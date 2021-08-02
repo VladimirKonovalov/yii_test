@@ -71,6 +71,7 @@ class m210801_134927_initial extends Migration
         $this->createTable('document', [
             'id' => $this->primaryKey(),
             'path' => $this->string()->notNull(),
+            'name' => $this->string()->notNull(),
             'user_id' => $this->integer()->notNull(),
         ], $tableOptions);
         $this->addForeignKey(

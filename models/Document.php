@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string $path
+ * @property string $name
  * @property integer $user_id
  */
 class Document extends ActiveRecord
@@ -24,6 +25,7 @@ class Document extends ActiveRecord
     {
         return [
             [['path'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => false, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }

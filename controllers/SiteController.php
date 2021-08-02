@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Document;
 use app\models\File;
 use app\models\RegisterForm;
 use app\models\User;
@@ -82,6 +83,13 @@ class SiteController extends Controller
                 $sheet->setCellValueByColumnAndRow(1, $index + 1, $data->username);
                 $sheet->setCellValueByColumnAndRow(2, $index + 1, $data->organizationName);
                 $sheet->setCellValueByColumnAndRow(3, $index + 1, $file ? $file->path : '');
+                $documents = Document::find()->where('user_id=:id',[':id'=> $data->id])->all();
+                $documentsList = '';
+                foreach ($documents as $document) {
+                    $documentsList .= 'http://localhost:8000/uploads/files/'.$document->path;
+                    $documentsList .= ' ';
+                }
+                $sheet->setCellValueByColumnAndRow(4, $index + 1, $documentsList ? $documentsList : '');
             }
             $writer = new Xlsx($spreadsheet);
 
@@ -151,6 +159,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->register()) {
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->documentFiles = UploadedFile::getInstances($model, 'documentFiles');
                 if ($model->upload(time(), $user->id)) {
                     Yii::$app->session->setFlash('success','OK');
                 }

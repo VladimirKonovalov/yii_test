@@ -29,10 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
+                'headerOptions' => ['style' => 'max-width:20%'],
                 'attribute' => 'filepath',
                 'label' => 'Изображение',
                 'value' => 'filepath',
                 'format' => 'image',
+
             ],
             [
                 'attribute' => 'username',
@@ -44,11 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Организация',
                 'value' => 'organizationName',
             ],
-//            [
-//                'attribute' => 'documentList',
-//                'label' => 'Файлы',
-//                'value' => 'documentList',
-//            ],
+            [
+                'attribute' => 'document',
+                'label' => 'Файлы',
+                'value'=>function($model, $key, $index){
+                    $res='';
+                    foreach ( $model->document as $k=>$l ){
+                        $res .= Html::tag('div',Html::tag('a',$l->name, ['href' => 'http://localhost:8000/uploads/files/'.$l->path]));
+                    }
+                    return $res;
+                },
+                'format'=>'raw'
+            ],
 
 
   //          ['class' => 'yii\grid\ActionColumn'],
